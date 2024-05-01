@@ -32,8 +32,25 @@ app.get('/api/departments', async (req, res, next) => {
     }
 });
 
+// create employee
+// curl localhost:3000/api/employees -X POST -d '{"name":"A New note", "department_id":1, "ranking": 17}' -H "Content-Type:application/json"
+app.post('api/employees', async (req, res, next) => {
+    try {
+        const SQL = /* sql */ 
+        `
+        INSERT INTO employee(name, department_id)
+        VALUES($1, $2)
+        RETURNING *
+    `;
+        const response = await client.query(SQL, [req.body.name, req.body.department_id]);
+        res.send(response.rows[0]);
+    } catch (error) {
+        next(error);
+    }
+});
 
-//create and seed tables
+
+//create and seed tables, initilaize
 const init = async () => {
     await client.connect();
 
