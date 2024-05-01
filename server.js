@@ -1,10 +1,37 @@
 require('dotenv').config();
-const express = require('express');
-const app = express();
 const pg = require('pg');
 const client = new pg.Client(
     process.env.DATABASE_URL || `postgress://localhost/${process.env.DB_NAME}`
 );
+
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+app.use(require('morgan')('dev'));
+
+// read employees
+app.get('/api/employees', async (req, res, next) => {
+    try {
+        const SQL = `SELECT * FROM employee`;
+        const response = await client.query(SQL);
+        res.send(response.rows);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// read departments
+app.get('/api/departments', async (req, res, next) => {
+    try {
+        const SQL = `SELECT * FROM department`;
+        const response = await client.query(SQL);
+        res.send(response.rows);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 //create and seed tables
 const init = async () => {
