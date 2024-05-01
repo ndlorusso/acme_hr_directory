@@ -33,7 +33,7 @@ app.get('/api/departments', async (req, res, next) => {
 });
 
 // create employee, working
-// curl localhost:3000/api/employees -X POST -d '{"name":"A New note", "department_id":1, "ranking": 17}' -H "Content-Type:application/json"
+// curl localhost:3000/api/employees -X POST -d '{"name":"A New note", "department_id":1}' -H "Content-Type:application/json"
 app.post('/api/employees', async (req, res, next) => {
     try {
         const SQL = /* sql */ 
