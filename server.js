@@ -49,6 +49,18 @@ app.post('api/employees', async (req, res, next) => {
     }
 });
 
+// delete employee
+// curl localhost:3000/api/employees/1 -X DELETE
+app.delete('api/employees/:id', async (req, res, next) => {
+    try {
+        const SQL = `DELETE FROM employee WHERE id=$1`;
+        await client.query(SQL, [req.params.id]);
+        res.sendStatus(204);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 //create and seed tables, initilaize
 const init = async () => {
