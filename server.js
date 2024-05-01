@@ -61,6 +61,29 @@ app.delete('api/employees/:id', async (req, res, next) => {
     }
 });
 
+// update employee
+// curl localhost:3000/api/employees/1 -X PUT -d '{"name":"Updated", "department_id":1, "ranking": 99}' -H "Content-Type:application/json”
+app.put('/api/employees/:id', async (req, res, next) => {
+    try {
+        const SQL = /* sql */
+        `
+        UPDATE employee
+        SET name=$1, department_id=$2, updated_at=now()
+        WHERE id=$4
+        RETURNING *
+        `;
+        const response = await client.query(SQL,
+        [req.body.name, req.body.department_id, req.params.id]);
+        res.send(response.rows[0]);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// handle errors
+app.use((error, req, res, next) => {
+    res.status(res.status || 500).send({error: error});
+});
 
 //create and seed tables, initilaize
 const init = async () => {
